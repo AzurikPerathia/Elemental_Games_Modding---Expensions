@@ -704,7 +704,7 @@ async function initialize() {
       const option = document.createElement('option'); option.value = level.id; option.textContent = translateLevelName(level.name || level.label || level.id); group.append(option);
     }
     $('levelCount').textContent = `${state.levels.length} NIVEAUX`;
-    $('sourcePath').textContent = catalog.sourceDir || translate('Changements enregistrés dans le projet local');
+    $('sourcePath').textContent = catalog.sourceDir ? catalog.sourceDir.split(/[\\/]/).filter(Boolean).at(-1) : translate('Changements enregistrés dans le projet local');
     $('sourcePath').title = catalog.sourceDir || '';
     const initial = state.levels.find(level => level.id === state.level) || state.levels.find(level => level.id === 'town') || state.levels[0];
     if (!initial) {

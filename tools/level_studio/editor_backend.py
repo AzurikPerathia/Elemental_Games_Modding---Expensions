@@ -17,8 +17,9 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
+from studio_paths import ASSET_ROOT, DATA_ROOT
 
-STUDIO_ROOT = Path(__file__).resolve().parent
+STUDIO_ROOT = DATA_ROOT
 
 
 def default_source():
@@ -38,10 +39,10 @@ def default_source():
 def default_toolkit():
     if os.environ.get("AZURIK_TOOLKIT"):
         return Path(os.environ["AZURIK_TOOLKIT"]).expanduser()
-    for candidate in (STUDIO_ROOT.parent / "randomizer", STUDIO_ROOT.parent):
+    for candidate in (ASSET_ROOT.parent / "randomizer", ASSET_ROOT.parent):
         if (candidate / "azurik_mod").is_dir():
             return candidate
-    return STUDIO_ROOT.parent / "randomizer"
+    return ASSET_ROOT.parent / "randomizer"
 
 
 DEFAULT_SOURCE = default_source()

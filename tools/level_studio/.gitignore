@@ -15,3 +15,7 @@ source/
 *.qcow2
 *.eeprom
 node_modules/
+.venv-desktop/
+.webview/
+build/
+dist/

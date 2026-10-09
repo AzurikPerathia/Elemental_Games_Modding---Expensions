@@ -52,6 +52,30 @@ def wait_ready(manager, identifier):
     pytest.fail("ISO import did not complete")
 
 
+@pytest.mark.parametrize("corrupt", [False, True])
+def test_european_empty_localization_placeholder_is_preserved(tmp_path, corrupt):
+    path = tmp_path / "game.iso"
+    iso_fixture(path)
+    data = bytearray(path.read_bytes())
+    metadata = [int.from_bytes(b"xobx", "little"), 4, 0, 0, 4096,
+                0, 4096, 0, 4096, 0, 4096, 0, 4096, 4096, 0]
+    if corrupt:
+        metadata[-1] = 1
+    placeholder = struct.pack("<15I", *metadata)
+    struct.pack_into("<H", data, 35 * SECTOR + 2, 8)
+    struct.pack_into("<HHIIBB", data, 35 * SECTOR + 32, 0, 0, 39, len(placeholder), 0, 7)
+    data[35 * SECTOR + 46:35 * SECTOR + 53] = b"loc.xbr"
+    data[39 * SECTOR:39 * SECTOR + len(placeholder)] = placeholder
+    path.write_bytes(data)
+    if corrupt:
+        with pytest.raises(ValueError, match="tronquée"):
+            XboxISO(path)
+        return
+    image = XboxISO(path)
+    image.extract(tmp_path / "extracted")
+    assert (tmp_path / "extracted/gamedata/loc.xbr").read_bytes() == placeholder
+
+
 @pytest.mark.parametrize("partition", [0, 0x18300000, 0x0FD90000, 0x02080000])
 def test_xiso_and_known_disc_partition_offsets_extract_exact_bytes(tmp_path, partition):
     path = tmp_path / "game.iso"

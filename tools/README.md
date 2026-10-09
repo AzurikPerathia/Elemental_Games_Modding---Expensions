@@ -1,24 +1,18 @@
 # Tools and plugins
 
-Each module has its own folder so its files, dependencies and documentation can be found together.
+Each module has its own folder with source, launch files and documentation.
 
 | Module | Folder | Purpose |
 | --- | --- | --- |
-| **Azurik Level Editor — Level Studio V6** | [level_studio](level_studio/README.md) | 3D level inspection and editing, French/English interface, free camera, object locks, local ISO import, and texture/model export. |
-| **Azurik Randomizer** | [randomizer](randomizer/README.md) | Full-game randomizer, logic solver and existing GUI/CLI tools. |
+| **Azurik Level Studio 1.0.0** | [level_studio](level_studio/README.md) | Native Windows 3D level editor, French/English UI, camera navigation, locks, local ISO import, source-preserving exports and asset inspection. |
+| **Azurik Randomizer** | [randomizer](randomizer/README.md) | Full-game randomizer, solver and existing GUI/CLI tools. |
 
-## Launch the level editor
+## Open the level editor
 
-Install Python 3.10 or newer, then run:
+Double-click `level_studio/windows/Azurik Level Studio.exe` or `level_studio/Ouvrir Azurik Level Studio.bat`. The bundled executable needs no Python installation. Use **Import ISO** for your own Azurik Xbox ISO/XISO. See the [guide](level_studio/README.md), [screenshots](level_studio/docs/SCREENSHOTS.md) and [official Windows release](https://github.com/AzurikPerathia/Azurik-Level-Editor/releases/tag/v1.0.0).
 
-```sh
-cd tools/level_studio
-python -m pip install -r requirements.txt
-python server.py --open
-```
+Source use: install `requirements-desktop.txt`, then run `python desktop.py` inside `tools/level_studio`. WebView2 is required on Windows. Browser mode remains available with `requirements.txt` and `python server.py --open`.
 
-On Windows, after installing the dependencies, open `tools/level_studio/Launch Studio.cmd` or `Ouvrir Azurik Level Studio.cmd`. The editor runs locally at `http://127.0.0.1:8766/`. Use **Import ISO** to open your own Azurik Xbox ISO/XISO, or supply an extracted dump as described in the [editor README](level_studio/README.md).
+## Add a module
 
-## Add another module
-
-Create a separate `tools/<module_name>/` folder, keep its source and launch files there, and include a README with installation, dependencies and usage instructions. Add its entry to this catalogue. Generated game data, imports, user projects, saves, caches and exports belong outside version control.
+Create a separate `tools/<module_name>/` folder and add source, dependencies, launchers and a README. Add it to this catalogue. Generated game data, user projects, imports and exports stay outside version control.

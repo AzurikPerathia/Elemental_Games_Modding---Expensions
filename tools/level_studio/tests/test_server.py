@@ -61,6 +61,30 @@ def test_catalog_and_gzip_scene(studio):
     assert json.loads(gzip.decompress(body))["level"] == "town"
 
 
+def test_large_gzip_module_keeps_connection_for_next_request(studio):
+    # Exercise the real bundled module, rather than a tiny synthetic response:
+    # WebView2 previously reset this transfer before it could start the editor.
+    from server import ROOT
+    conn = http.client.HTTPConnection("127.0.0.1", studio.server_port, timeout=10)
+    try:
+        conn.request("GET", "/vendor/three.module.js", headers={"Accept-Encoding": "gzip"})
+        response = conn.getresponse()
+        assert response.status == 200 and response.version == 11
+        assert response.getheader("Content-Encoding") == "gzip"
+        compressed = response.read()
+        assert len(compressed) == int(response.getheader("Content-Length"))
+        assert gzip.decompress(compressed) == (ROOT / "web/vendor/three.module.js").read_bytes()
+        socket = conn.sock
+        assert socket is not None
+        conn.request("GET", "/api/catalog")
+        response = conn.getresponse()
+        assert response.status == 200
+        assert json.loads(response.read())["levels"][0]["id"] == "town"
+        assert conn.sock is socket
+    finally:
+        conn.close()
+
+
 def test_catalog_adapts_backend_levels_for_browser(studio):
     status, _, body = request(studio, "GET", "/api/catalog")
     assert status == 200
