@@ -122,3 +122,7 @@ All contributed code must be original work. Do not submit decompiled output verb
 Original tooling and documentation in this repository is released under the [MIT License](LICENSE).
 
 Reconstructed code files represent the contributors' own original expression of observed binary behavior and are similarly MIT licensed. They are not copies or derivatives of any copyrighted source code.
+
+### Azurik Level Studio
+
+[Azurik Level Studio](tools/level_studio/README.md) is a local 3D level inspection and editing tool with French/English UI, free camera navigation, persistent object locks, source-preserving transform exports, preview-only placement overrides and local Xbox ISO import. It loads game data from the user’s own disc or extracted dump and does not include game assets. Rendering and export limitations are documented in the tool’s README.
