@@ -4,7 +4,11 @@ A community-driven reverse engineering and modding project for classic Xbox titl
 
 This **Expensions** fork hosts each tool/plugin in its own folder under `tools/`. Browse the [tools and plugins catalogue](tools/README.md), or open the [Azurik Level Editor](tools/level_studio/README.md) directly for installation and launch instructions.
 
-**Azurik Level Studio 1.0.0** is now available as a [native Windows level editor](tools/level_studio/README.md), with a bundled executable, bilingual controls, local ISO import and a [screenshot gallery](tools/level_studio/docs/SCREENSHOTS.md). Browse the [tools catalogue](tools/README.md) or the [dedicated editor repository and official release](https://github.com/AzurikPerathia/Azurik-Level-Editor).
+**Azurik Level Studio 2.0.0** is now available as a [native Windows level editor](tools/level_studio/README.md), with a bundled executable, fixed bilingual controls, undoable level restoration, model/texture import and compatible replacement, local ISO import and a [screenshot gallery](tools/level_studio/docs/SCREENSHOTS.md). Browse the [tools catalogue](tools/README.md) or the [dedicated editor repository and official release](https://github.com/AzurikPerathia/Azurik-Level-Editor).
+
+EDIT : You need to clear the cache for the changes you make to take effect ! Don’t worry, this won’t affect your save files in any way!
+
+Clear only the Xbox game cache partitions; keep your virtual HDD and saves. [Cache guide](tools/level_studio/docs/GAME_CACHE.md).
 
 ---
 
