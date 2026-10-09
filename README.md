@@ -2,6 +2,8 @@
 
 A community-driven reverse engineering and modding project for classic Xbox titles built on the Elemental engine. This repository contains research, tools, documentation, and code reconstructions produced through static analysis — no original game assets or proprietary binaries are included or distributed.
 
+This **Expensions** fork hosts each tool/plugin in its own folder under `tools/`. Browse the [tools and plugins catalogue](tools/README.md), or open the [Azurik Level Editor](tools/level_studio/README.md) directly for installation and launch instructions.
+
 ---
 
 ## ⚠️ Legal Notice
@@ -32,14 +34,19 @@ Goals include:
 ## Repository Structure
 
 ```
-Elemental_Games_Modding/
-├── docs/               # Research notes, struct definitions, system documentation
+Elemental_Games_Modding---Expensions/
 ├── tools/
-│   └── randomizer/     # Full-game randomizer for Azurik (GUI + CLI)
-├── reconstructed/      # Reconstructed C++ headers and source files
-├── scripts/            # Automation scripts (Ghidra, Python, etc.)
+│   ├── level_studio/   # Azurik 3D level editor and asset inspection
+│   ├── randomizer/     # Full-game randomizer for Azurik (GUI + CLI)
+│   └── README.md       # Tools and plugins catalogue
 └── README.md
 ```
+
+Each tool/plugin includes its own source files, dependencies, documentation and launch instructions. New modules should follow the same folder layout and be added to the [catalogue](tools/README.md).
+
+### Azurik Level Editor
+
+[Azurik Level Studio](tools/level_studio/README.md) is a local 3D level inspection and editing tool with French/English UI, free camera navigation, persistent object locks, source-preserving transform exports, preview-only placement overrides and local Xbox ISO import. It loads game data from the user’s own disc or extracted dump and does not include game assets. Rendering and export limitations are documented in the tool’s README.
 
 ### Azurik Randomizer
 
@@ -122,7 +129,3 @@ All contributed code must be original work. Do not submit decompiled output verb
 Original tooling and documentation in this repository is released under the [MIT License](LICENSE).
 
 Reconstructed code files represent the contributors' own original expression of observed binary behavior and are similarly MIT licensed. They are not copies or derivatives of any copyrighted source code.
-
-### Azurik Level Studio
-
-[Azurik Level Studio](tools/level_studio/README.md) is a local 3D level inspection and editing tool with French/English UI, free camera navigation, persistent object locks, source-preserving transform exports, preview-only placement overrides and local Xbox ISO import. It loads game data from the user’s own disc or extracted dump and does not include game assets. Rendering and export limitations are documented in the tool’s README.
