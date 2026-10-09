@@ -172,6 +172,14 @@ class XboxISO:
             if header[:4] != b"xobx" or struct.unpack_from("<I", header, 4)[0] != 4:
                 raise ValueError("Une archive XBR de l’ISO est invalide.")
             count, payload = struct.unpack_from("<II", header, 12)
+            # The European retail disc has a 60-byte, zero-resource loc.xbr
+            # placeholder. Preserve it during extraction; it is not a level.
+            # Accept only its exact metadata shape, never a truncated archive.
+            if (entry["path"].lower() == "gamedata/loc.xbr" and entry["size"] == 60
+                    and count == 0 and payload == 4096):
+                metadata = struct.unpack("<15I", self._read_entry(stream, entry, 0, 60))
+                if metadata[2:] == (0, 0, 4096, 0, 4096, 0, 4096, 0, 4096, 0, 4096, 4096, 0):
+                    continue
             if count > 65536 or 64 + count * 16 > payload or payload > entry["size"]:
                 raise ValueError("Une archive XBR de l’ISO est tronquée.")
         self.title = title

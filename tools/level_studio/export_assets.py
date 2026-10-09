@@ -28,9 +28,11 @@ from library_bindings import read_library_platform_bindings
 from renderer_parser import decode_mesh, decode_pushbuffer
 from static_scene import read_static_descriptors
 from validate_asset_export import validate_export
+from studio_paths import DATA_ROOT
+from studio_version import VERSION
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_OUTPUT = ROOT.parent / "exports" / "assets-v5-20261008"
+DEFAULT_OUTPUT = DATA_ROOT / "exports" / ("assets-" + VERSION)
 
 
 def unique_output(base):

@@ -21,8 +21,10 @@ import webbrowser
 from uuid import uuid4
 from editor_backend import DEFAULT_SOURCE, DEFAULT_TOOLKIT
 from xbox_iso import ISOImports, MAX_IMAGE_BYTES
+from studio_paths import ASSET_ROOT, DATA_ROOT
+from studio_version import VERSION
 
-ROOT = Path(__file__).resolve().parent
+ROOT = ASSET_ROOT
 MAX_REQUEST = 64 * 1024
 MAX_CAPTURE_REQUEST = 16 * 1024 * 1024
 CAPTURE_NAME = re.compile(r"capture-\d{8}-\d{6}-\d{6}-[0-9a-f]{8}\.png")
@@ -75,7 +77,7 @@ class StudioServer(ThreadingHTTPServer):
         self.studio_lock = threading.RLock()
         self.character_library = None
         self.asset_library = None
-        self.imports = ISOImports(imports_dir or ROOT / "imports")
+        self.imports = ISOImports(imports_dir or DATA_ROOT / "imports")
         self.original_backend = backend
         self.active_source = "original" if backend is not None else None
 
@@ -114,7 +116,7 @@ class StudioServer(ThreadingHTTPServer):
         if self.character_library is None:
             from character_library import CharacterLibrary
             self.character_library = CharacterLibrary(
-                self.backend.source_dir, getattr(self.backend, "texture_dir", ROOT / "cache" / "textures"))
+                self.backend.source_dir, getattr(self.backend, "texture_dir", DATA_ROOT / "cache" / "textures"))
         return self.character_library
 
     def graphics(self):
@@ -122,12 +124,15 @@ class StudioServer(ThreadingHTTPServer):
         if self.asset_library is None:
             from asset_library import AssetLibrary
             self.asset_library = AssetLibrary(
-                self.backend.source_dir, getattr(self.backend, "texture_dir", ROOT / "cache" / "textures"))
+                self.backend.source_dir, getattr(self.backend, "texture_dir", DATA_ROOT / "cache" / "textures"))
         return self.asset_library
 
 
 class StudioHandler(BaseHTTPRequestHandler):
-    server_version = "AzurikLevelStudio/0.6.0"
+    server_version = f"AzurikLevelStudio/{VERSION}"
+    # WebView2 needs persistent, length-delimited responses for large gzip
+    # modules; HTTP/1.0 connection teardown could reset the Three.js transfer.
+    protocol_version = "HTTP/1.1"
 
     def log_message(self, fmt, *args):
         print(f"{self.log_date_time_string()} {fmt % args}", flush=True)
@@ -185,7 +190,7 @@ class StudioHandler(BaseHTTPRequestHandler):
         query = parse_qs(route.query)
         try:
             if route.path == "/api/health":
-                self._json({"app": "azurik-level-studio", "version": "0.6.0"})
+                self._json({"app": "azurik-level-studio", "version": VERSION})
                 return
             if route.path == "/api/import-iso":
                 self._json(self.server.imports.status(query.get("id", [""])[0]))
@@ -425,8 +430,8 @@ def main():
     parser = argparse.ArgumentParser(description="Azurik Level Studio — éditeur local")
     parser.add_argument("--source", type=Path, default=DEFAULT_SOURCE)
     parser.add_argument("--toolkit", type=Path, default=DEFAULT_TOOLKIT)
-    parser.add_argument("--project-dir", type=Path, default=ROOT / "projects" / "default")
-    parser.add_argument("--exports-dir", type=Path, default=ROOT / "exports")
+    parser.add_argument("--project-dir", type=Path, default=DATA_ROOT / "projects" / "default")
+    parser.add_argument("--exports-dir", type=Path, default=DATA_ROOT / "exports")
     parser.add_argument("--port", type=int, default=8766)
     parser.add_argument("--open", action="store_true")
     options = parser.parse_args()
@@ -435,7 +440,7 @@ def main():
     gamedata = source if source.name.lower() == "gamedata" else source / "gamedata"
     backend = (StudioBackend(source_dir=source, toolkit_dir=options.toolkit,
                              project_dir=options.project_dir, exports_dir=options.exports_dir,
-                             texture_dir=ROOT / "cache" / "textures") if gamedata.is_dir() else None)
+                             texture_dir=DATA_ROOT / "cache" / "textures") if gamedata.is_dir() else None)
     server = StudioServer(("127.0.0.1", options.port), backend)
     url = f"http://127.0.0.1:{server.server_port}"
     print(f"Azurik Level Studio — {url}", flush=True)
