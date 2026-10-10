@@ -2,7 +2,9 @@
 
 A community-driven reverse engineering and modding project for classic Xbox titles built on the Elemental engine. This repository contains research, tools, documentation, and code reconstructions produced through static analysis — no original game assets or proprietary binaries are included or distributed.
 
-**Azurik Level Studio 2.0.0** is now available as a [native Windows level editor](tools/level_studio/README.md), with a bundled executable, fixed bilingual controls, undoable level restoration, model/texture import and compatible replacement, local ISO import and a [screenshot gallery](tools/level_studio/docs/SCREENSHOTS.md). Browse the [tools catalogue](tools/README.md) or the [dedicated editor repository and official release](https://github.com/AzurikPerathia/Azurik-Level-Editor).
+**Azurik Level Studio 2.0.1** is now available as a [native Windows level editor](tools/level_studio/README.md), with a bundled executable, fixed bilingual controls, undoable level restoration, model/texture import and compatible replacement, local ISO import and a [screenshot gallery](tools/level_studio/docs/SCREENSHOTS.md). Browse the [tools catalogue](tools/README.md) or the [dedicated editor repository and official release](https://github.com/Azurik-Modding-Hub/Azurik-Level-Editor).
+
+Patch 2.0.1 keeps the full scene detail and textures while caching unchanged renderer updates. A local A5 material-update benchmark fell from **4.19 to 1.16 ms per frame** (about 72% less CPU time); this does not measure GPU FPS. [Download the official 2.0.1 Windows release](https://github.com/Azurik-Modding-Hub/Azurik-Level-Editor/releases/tag/v2.0.1).
 
 EDIT : You need to clear the cache for the changes you make to take effect ! Don’t worry, this won’t affect your save files in any way!
 
